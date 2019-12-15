@@ -225,6 +225,13 @@ in buildPythonPackage rec {
     install_name_tool -change @rpath/libc10.dylib $dev/lib/libc10.dylib $dev/lib/libshm.dylib
   '';
 
+  shellHook = ''
+    # set date epoch so we can use python wheels
+    SOURCE_DATE_EPOCH=$(date +%s)
+    virtualenv --no-setuptools venv
+    export PATH=$PWD/venv/bin:$PATH
+    pip install -r requirements.txt
+  '';
 
   meta = {
     description = "Open source, prototype-to-production deep learning platform";
